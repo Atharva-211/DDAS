@@ -1,0 +1,9 @@
+# Node modules
+node_modules/
+
+# Electron binaries
+**/node_modules/electron/dist/
+
+# Other large files
+*.zip
+*.tar.gz
