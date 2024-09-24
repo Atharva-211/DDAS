@@ -22,23 +22,26 @@ async def hash_and_store_file(file: UploadFile, file_location: str):
     
     # Check if the hash exists in the database
     if check_hash_exists(hash_hex, file_extension):
-        if hash_hex not in duplicates_db:
-            duplicates_db[hash_hex] = {
+        # Check for duplicates by name and location
+        key = (file.filename, file_location)
+        if key not in duplicates_db:
+            duplicates_db[key] = {
+                'hash': hash_hex,
                 'filenames': [file.filename],
                 'extension': file_extension,
                 'size': file_size,
-                'location': [file_location]  # Save file location in list
+                'locations': [file_location]  # Save file location in list
             }
         else:
-            duplicates_db[hash_hex]['filenames'].append(file.filename)
-            duplicates_db[hash_hex]['location'].append(file_location)  # Append location
+            duplicates_db[key]['filenames'].append(file.filename)
+            duplicates_db[key]['locations'].append(file_location)  # Append location
 
         result = {
             "sha256_hash": hash_hex,
-            "filenames": duplicates_db[hash_hex]['filenames'],
+            "filenames": duplicates_db[key]['filenames'],
             "extension": file_extension,
             "size": file_size,
-            "location": duplicates_db[hash_hex]['location'],  # Include file location
+            "locations": duplicates_db[key]['locations'],  # Include file location
             "message": "Duplicate detected",
             "duplicates": get_duplicate_files()
         }
@@ -51,7 +54,7 @@ async def hash_and_store_file(file: UploadFile, file_location: str):
                 "filenames": [file.filename],
                 "extension": file_extension,
                 "size": file_size,
-                "location": [file_location],  # Include file location in response
+                "locations": [file_location],  # Include file location in response
                 "message": "Hash stored in database"
             }
         else:
@@ -60,14 +63,14 @@ async def hash_and_store_file(file: UploadFile, file_location: str):
                 'filenames': [file.filename],
                 'extension': file_extension,
                 'size': file_size,
-                'location': [file_location]  # Save file location in list
+                'locations': [file_location]  # Save file location in list
             }
             result = {
                 "sha256_hash": hash_hex,
                 "filenames": [file.filename],
                 "extension": file_extension,
                 "size": file_size,
-                "location": [file_location],  # Include file location in response
+                "locations": [file_location],  # Include file location in response
                 "message": "Hash stored in memory"
             }
 
@@ -76,7 +79,7 @@ async def hash_and_store_file(file: UploadFile, file_location: str):
 def get_all_files() -> Union[Dict[str, str], List[Dict[str, Union[str, List[str], int]]]]:
     if not hashes_db:
         return {"message": "No hashes found in memory"}
-    return [{"sha256_hash": hash_hex, "filenames": info['filenames'], "extension": info['extension'], "size": info['size'], "location": info['location']} 
+    return [{"sha256_hash": hash_hex, "filenames": info['filenames'], "extension": info['extension'], "size": info['size'], "locations": info['locations']} 
             for hash_hex, info in hashes_db.items()]
 
 def get_duplicate_files() -> Union[Dict[str, str], List[Dict[str, Union[str, List[str], int, List[str]]]]]:
@@ -85,14 +88,13 @@ def get_duplicate_files() -> Union[Dict[str, str], List[Dict[str, Union[str, Lis
     
     # Prepare the results with file locations included
     result = []
-    for hash_hex, info in duplicates_db.items():
-        file_locations = info.get('location', [])
+    for key, info in duplicates_db.items():
         result.append({
-            "sha256_hash": hash_hex,
+            "sha256_hash": info['hash'],
             "filenames": info['filenames'],
             "extension": info['extension'],
             "size": info['size'],
-            "locations": file_locations  # Include file locations in the response
+            "locations": info['locations']  # Include file locations in the response
         })
     
     return result

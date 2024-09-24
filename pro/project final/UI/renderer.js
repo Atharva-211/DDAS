@@ -9,10 +9,25 @@ function displayDuplicates(duplicates) {
         duplicate.locations.forEach(location => {
             const row = document.createElement('tr');
             
-            // Filename cell
-            const filenameCell = document.createElement('td');
-            filenameCell.textContent = duplicate.filenames.join(', ');
-            row.appendChild(filenameCell);
+            // Hash cell
+            const hashCell = document.createElement('td');
+            hashCell.textContent = duplicate.hash;
+            row.appendChild(hashCell);
+
+            // Filenames cell
+            const filenamesCell = document.createElement('td');
+            filenamesCell.textContent = duplicate.filenames.join(', ');
+            row.appendChild(filenamesCell);
+
+            // Extension cell
+            const extensionCell = document.createElement('td');
+            extensionCell.textContent = duplicate.extension;
+            row.appendChild(extensionCell);
+
+            // Size cell
+            const sizeCell = document.createElement('td');
+            sizeCell.textContent = duplicate.size;
+            row.appendChild(sizeCell);
 
             // Location cell
             const locationCell = document.createElement('td');
@@ -40,38 +55,38 @@ function displayDuplicates(duplicates) {
     });
 }
 
-// Handle folder selection
-document.getElementById('selectFolder').addEventListener('click', async () => {
-    const folderPath = await ipcRenderer.invoke('dialog:openFolder');
+// Handle file selection
+document.getElementById('selectFile').addEventListener('click', async () => {
+    const filePath = await ipcRenderer.invoke('dialog:openFile');
     
-    if (folderPath) {
-        document.getElementById('folderPath').innerText = `Selected Folder: ${folderPath}`;
-        document.getElementById('uploadFiles').disabled = false;
+    if (filePath) {
+        document.getElementById('filePath').innerText = `Selected File: ${filePath}`;
+        document.getElementById('uploadFile').disabled = false;
 
-        // Store the selected folder path
-        window.selectedFolderPath = folderPath;
+        // Store the selected file path
+        window.selectedFilePath = filePath;
     }
 });
 
 // Handle file upload
-document.getElementById('uploadFiles').addEventListener('click', async () => {
-    const folderPath = window.selectedFolderPath;
+document.getElementById('uploadFile').addEventListener('click', async () => {
+    const filePath = window.selectedFilePath;
 
-    if (!folderPath) {
-        document.getElementById('status').innerText = 'Please select a folder first!';
+    if (!filePath) {
+        document.getElementById('status').innerText = 'Please select a file first!';
         return;
     }
 
-    document.getElementById('status').innerText = 'Uploading files...';
+    document.getElementById('status').innerText = 'Uploading file...';
     
-    const response = await ipcRenderer.invoke('uploadFiles', folderPath);
+    const response = await ipcRenderer.invoke('uploadFile', filePath);
 
     if (response.status === 'success') {
-        document.getElementById('status').innerText = 'Files uploaded successfully!';
+        document.getElementById('status').innerText = 'File uploaded successfully!';
         // Fetch and display duplicates after upload
         const duplicates = await ipcRenderer.invoke('getDuplicates');
         displayDuplicates(duplicates);
     } else {
-        document.getElementById('status').innerText = 'Failed to upload files.';
+        document.getElementById('status').innerText = 'Failed to upload file.';
     }
 });

@@ -1,93 +1,63 @@
-const { app, BrowserWindow, dialog, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
-const fs = require('fs');
-const axios = require('axios');
-const FormData = require('form-data');
+const fs = require('fs'); // Require fs for file operations
+const axios = require('axios'); // Assuming you're using axios for network requests
 
-const UPLOAD_URL = 'http://127.0.0.1:8000/upload';
-const DUPLICATES_URL = 'http://127.0.0.1:8000/duplicate';
-
-// Create the main window
 function createWindow() {
     const win = new BrowserWindow({
         webPreferences: {
-            preload: path.join(__dirname, 'renderer.js'),
-            nodeIntegration: true,
-            contextIsolation: false
+            nodeIntegration: true, // Allows you to use Node.js in your renderer process
+            contextIsolation: false, // Disable context isolation
+        },
+    });
+
+    win.maximize();
+    win.loadFile('pages/revenue.html'); // Load your HTML file
+
+    // Handle folder selection dialog
+    ipcMain.handle('dialog:openFolder', async () => {
+        const result = await dialog.showOpenDialog(win, {
+            properties: ['openDirectory'], // Enable directory selection
+        });
+        return result.filePaths[0]; // Return the first selected folder path
+    });
+
+    // Handle file deletion
+    ipcMain.handle('deleteLocalFile', async (event, filePath) => {
+        console.log(`Attempting to delete file at: ${filePath}`); // Log the file path
+        try {
+            fs.unlinkSync(filePath); // Synchronously delete the file
+            console.log(`File deleted successfully: ${filePath}`);
+            return { status: 'success' };
+        } catch (error) {
+            console.error('Error deleting file:', error);
+            return { status: 'error', message: error.message };
         }
     });
-    win.maximize();
-    win.loadFile('pages/index.html');
+
+    // Handle fetching duplicates (placeholder for your actual logic)
+    ipcMain.handle('getDuplicates', async () => {
+        try {
+            const response = await axios.get('http://127.0.0.1:8000/folder/duplicates');
+            return response.data; // Return duplicates data
+        } catch (error) {
+            console.error('Error fetching duplicates:', error);
+            return []; // Return an empty array on error
+        }
+    });
 }
 
-// Handle folder selection
-ipcMain.handle('dialog:openFolder', async () => {
-    const { canceled, filePaths } = await dialog.showOpenDialog({ properties: ['openDirectory'] });
-    if (!canceled && filePaths.length > 0) {
-        return filePaths[0];
-    }
-    return null;
-});
+app.whenReady().then(createWindow);
 
-// Handle file upload
-ipcMain.handle('uploadFiles', async (event, folderPath) => {
-    try {
-        const files = fs.readdirSync(folderPath);
-
-        for (const file of files) {
-            const filePath = path.join(folderPath, file);
-            const fileBuffer = fs.readFileSync(filePath);
-            const formData = new FormData();
-            formData.append('file', fileBuffer, path.basename(filePath));
-            formData.append('file_location', filePath);
-
-            const response = await axios.post(UPLOAD_URL, formData, {
-                headers: {
-                    ...formData.getHeaders(),
-                },
-            });
-
-            console.log(`Uploaded ${file}:`, response.data);
-        }
-
-        return { status: 'success', message: 'Files uploaded successfully' };
-    } catch (error) {
-        console.error('Error uploading files:', error);
-        return { status: 'error', message: 'Failed to upload files' };
-    }
-});
-
-// Fetch duplicates
-ipcMain.handle('getDuplicates', async () => {
-    try {
-        const response = await axios.get(DUPLICATES_URL);
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching duplicates:', error);
-        return [];
-    }
-});
-
-// Delete a local file
-ipcMain.handle('deleteLocalFile', async (event, filePath) => {
-    try {
-        fs.unlinkSync(filePath);
-        return { status: 'success' };
-    } catch (error) {
-        console.error('Error deleting file:', error);
-        return { status: 'error' };
-    }
-});
-
-app.whenReady().then(() => {
-    createWindow();
-    app.on('activate', () => {
-        if (BrowserWindow.getAllWindows().length === 0) createWindow();
-    });
-});
-
+// Handle window close
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit();
+    }
+});
+
+app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
     }
 });

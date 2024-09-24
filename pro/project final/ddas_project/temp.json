@@ -1,0 +1,72 @@
+{
+    "hashes": {
+        "272311ef36cdf72bd1d5fdb80d371cfa3c7c9b02c198fc500d062c26a3703959": {
+            "filenames": [
+                "Que.48840tbsp3OS Assignments 1_24-25 (2).docx"
+            ],
+            "extension": "docx",
+            "size": 12594,
+            "locations": [
+                "D:\\SIH\\pro\\testing\\Que.48840tbsp3OS Assignments 1_24-25 (2).docx"
+            ]
+        },
+        "7610f6fb75817366f809e578bdfdcc92532bd1fa76fdaaec280db87df4dbc12d": {
+            "filenames": [
+                "Que.49147rvpo7OS Lab Assignment No 2 (2).docx"
+            ],
+            "extension": "docx",
+            "size": 72193,
+            "locations": [
+                "D:\\SIH\\pro\\testing\\Que.49147rvpo7OS Lab Assignment No 2 (2).docx"
+            ]
+        },
+        "adedf4ccedc3f73c09bce0e5e31a9f9c0864b252ec83468075cff00b9d39dc1c": {
+            "filenames": [
+                "Que.4948920ndpCN Lab Assignment 1 template - Copy.docx"
+            ],
+            "extension": "docx",
+            "size": 75500,
+            "locations": [
+                "D:\\SIH\\pro\\testing\\Que.4948920ndpCN Lab Assignment 1 template - Copy.docx"
+            ]
+        },
+        "69239927330785ef9790041d7a8cf48d78493eb36cb89bbe3ade09fc82968b01": {
+            "filenames": [
+                "Que.49492y4j99CN Lab Assignment  4 Static Routing - Copy.docx"
+            ],
+            "extension": "docx",
+            "size": 302906,
+            "locations": [
+                "D:\\SIH\\pro\\testing\\Que.49492y4j99CN Lab Assignment  4 Static Routing - Copy.docx"
+            ]
+        }
+    },
+    "duplicates": {
+        "adedf4ccedc3f73c09bce0e5e31a9f9c0864b252ec83468075cff00b9d39dc1c": {
+            "hash": "adedf4ccedc3f73c09bce0e5e31a9f9c0864b252ec83468075cff00b9d39dc1c",
+            "filenames": [
+                "Que.4948920ndpCN Lab Assignment 1 template - Copy.docx",
+                "Que.4948920ndpCN Lab Assignment 1 template.docx"
+            ],
+            "extension": "docx",
+            "size": 75500,
+            "locations": [
+                "D:\\SIH\\pro\\testing\\Que.4948920ndpCN Lab Assignment 1 template - Copy.docx",
+                "D:\\SIH\\pro\\testing\\Que.4948920ndpCN Lab Assignment 1 template.docx"
+            ]
+        },
+        "69239927330785ef9790041d7a8cf48d78493eb36cb89bbe3ade09fc82968b01": {
+            "hash": "69239927330785ef9790041d7a8cf48d78493eb36cb89bbe3ade09fc82968b01",
+            "filenames": [
+                "Que.49492y4j99CN Lab Assignment  4 Static Routing - Copy.docx",
+                "Que.49492y4j99CN Lab Assignment  4 Static Routing.docx"
+            ],
+            "extension": "docx",
+            "size": 302906,
+            "locations": [
+                "D:\\SIH\\pro\\testing\\Que.49492y4j99CN Lab Assignment  4 Static Routing - Copy.docx",
+                "D:\\SIH\\pro\\testing\\Que.49492y4j99CN Lab Assignment  4 Static Routing.docx"
+            ]
+        }
+    }
+}

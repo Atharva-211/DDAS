@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form
-from app.services.hash_service import hash_and_store_file, get_all_files, get_duplicate_files
+from app.services.hash_service import hash_and_store_file, get_duplicate_files, get_all_files
 
 router = APIRouter()
 

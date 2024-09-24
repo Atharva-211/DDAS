@@ -43,7 +43,7 @@
 
         <ul class="menu-links">
           <li class="nav-link">
-            <a href="dashboard.html">
+            <a href="index.html">
               <i class='bx bx-home-alt icon'></i>
               <span class="text nav-text">Dashboard</span>
             </a>
@@ -112,8 +112,33 @@
 
   </nav>
   <section class="home">
-    <div class="text">Revenue Content</div>
+    <div class="text">Revenue section
+      <h1>Folder Uploader</h1>
+      <div>
+        <button id="selectFolder">Select Folder</button>
+        <div id="folderPath"></div>
+        <button id="uploadFiles" disabled>Upload Files</button>
+        <div id="status"></div>
+        <table id="duplicatesTable">
+            <thead>
+                <tr>
+                    <th>SHA256 Hash</th>
+                    <th>Filename</th>
+                    <th>Extension</th>
+                    <th>Size</th>
+                    <th>Location</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="duplicatesTableBody"></tbody>
+        </table>
+    </div>
+    
+      <script src="../renderer_folder.js"></script>
+    </div>
   </section>
+  
+
 
   <script>
     const body = document.querySelector('body'),
